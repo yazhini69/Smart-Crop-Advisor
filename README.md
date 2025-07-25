@@ -5,7 +5,7 @@
  🎯 Domain:
  AgriTech
  🏆 Hackathon Submission – 2025
- 👨‍👩‍👧‍👦 Team Name:Sustainable Sorters 
+ 👨‍👩‍👧‍👦 Team Name: Strawhats
  Institution:KPR Institute of Engineering and Technology  
 
 
