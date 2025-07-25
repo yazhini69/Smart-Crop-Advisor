@@ -41,7 +41,7 @@
 
 ##  🧠  Tech Stack
 
-- **Frontend**: HTML, CSS, JavaScript
+- **Frontend**: HTML, CSS(optional), JavaScript
 - **Backend**: Python (Flask)
 - **ML Model**: Scikit-learn (Trained on agricultural dataset)
 - **Database**: Local JSON / Firebase-ready
