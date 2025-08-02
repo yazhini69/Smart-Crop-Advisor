@@ -2,40 +2,113 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🌿 Crop Recommendation - AgroNexus</title>
+  <title>🌱 Crop Recommendation - AgroNexus</title>
   <script defer src="script.js"></script>
-
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f8f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, #E9FCEF 0%, #BBE1C3 100%);
     }
 
+    /* ---- Animated SVG Hills ---- */
+    .background-svg {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 45vh;
+      pointer-events: none;
+      z-index: 0; /* background layer */
+    }
+
+    /* --- Sun Glow --- */
+    .sun {
+      position: fixed;
+      left: 70vw;
+      top: 6vh;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle at 60% 30%, #FFFBEA 0%, #ffea95 70%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(12px);
+      opacity: 0.7;
+      z-index: 1;
+      pointer-events: none;
+      animation: sun-rise 5s cubic-bezier(.2,1.1,.4,.88) forwards;
+    }
+    @keyframes sun-rise {
+      from { top: 30vh; opacity: 0.2;}
+      to { top: 6vh; opacity: 0.7;}
+    }
+
+    /* ---- Animated Floating Leaves ---- */
+    .leaf {
+      position: fixed;
+      width: 44px; height: 36px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.72;
+      animation: floatLeaf 9s linear infinite;
+      filter: blur(0.1px) drop-shadow(0px 2px 7px #b5c7a699);
+    }
+    .leaf:nth-child(1) { left: 12vw; top: 8vh; animation-delay: 0s; }
+    .leaf:nth-child(2) { left: 55vw; top: 16vh; animation-delay: 1.8s;}
+    .leaf:nth-child(3) { left: 80vw; top: 16vh; animation-delay: 5.3s;}
+    .leaf:nth-child(4) { left: 36vw; top: 23vh; animation-delay: 3.1s;}
+    @keyframes floatLeaf {
+      0% { transform: translateY(0) scale(0.85) rotate(-12deg);}
+      45% { transform: translateY(22vh) scale(1.1) rotate(21deg);}
+      70% { opacity: 0.9;}
+      95% { opacity: 0;}
+      100% { transform: translateY(36vh) scale(1.08) rotate(-13deg); opacity: 0;}
+    }
+
+    /* --- PAGE TITLE --- */
     h1 {
-      color: #2e7d32;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px #dcedc8;
+      margin-top: 50px;
+      margin-bottom: 17px;
+      color: #28a745;
+      letter-spacing: 1px;
+      z-index: 10;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #36703e 70%, #aee571 93%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0px 1.5px 1.5px #ffffff88;
+      text-align: center;
+      position: relative;
     }
 
+    /* --- GLASSMORPHISM FORM CARD --- */
     form {
-      background-color: #ffffff;
-      padding: 25px 30px;
-      border-radius: 12px;
-      width: 400px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      border: 2px solid #c8e6c9;
-      margin-bottom: 20px; /* Added margin for separation */
+      width: 410px;
+      margin: 0 auto 20px auto;
+      background: rgba(243,255,241,0.94);
+      box-shadow: 0 7px 30px 0 #43A04729, 0 1.5px 7px 0 #c3e28470, 0 0.5px 1.6px #52843a18;
+      border-radius: 18px;
+      padding: 30px 36px 20px 34px;
+      border: 2px solid #dafad1c1;
+      position: relative;
+      z-index: 10; /* ensure form is above hills */
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
+      transition: box-shadow 0.35s;
     }
+    form:hover { box-shadow: 0 10px 50px 0 #beffc382, 0 6px 18px #6be37b28;}
 
     label {
       display: block;
-      margin-top: 12px;
+      margin-top: 13px;
       font-weight: 600;
-      color: #33691e;
+      color: #388e3c;
+      font-size: 15px;
     }
 
     input, select {
@@ -43,86 +116,194 @@
       padding: 8px 10px;
       margin-top: 4px;
       margin-bottom: 10px;
-      border: 1px solid #a5d6a7;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    input:focus, select:focus {
-      border-color: #66bb6a;
+      border: 1.5px solid #c8f2c7;
+      border-radius: 7px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #f1f8e965;
+      box-sizing: border-box;
       outline: none;
-      background-color: #f1f8e9;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: #75c559;
+      box-shadow: 0 1px 6px 0 #c5f5b6a6;
+      background: #f6fff0;
     }
 
     button {
-      margin-top: 15px;
-      background-color: #43a047;
-      color: white;
+      margin-top: 16px; margin-bottom: 6px;
+      background: linear-gradient(88deg,#43a047,#7cf279 85%);
+      color: #fff;
       font-weight: bold;
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 16px;
+      padding: 11px 0;
+      border-radius: 7px;
+      font-size: 17px;
+      box-shadow: 0 3px 10px #b1e6c285;
+      width: 100%;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
-
     button:hover {
-      background-color: #2e7d32;
+      background: linear-gradient(88deg,#2e7d32 60%,#84f46c 95%);
+      letter-spacing: 1.2px;
     }
+    ::placeholder { color:#71c084ad;}
 
+    /* --- RESULT + SUGGESTIONS --- */
     #result {
-      margin-top: 5px; /* Adjusted margin */
-      font-size: 20px;
-      font-weight: bold;
-      color: #1b5e20;
-      background-color: #e8f5e9;
-      padding: 10px 15px;
-      border-radius: 6px;
-      border: 1px solid #c5e1a5;
-      width: 400px; /* Set width to match form */
-      text-align: center; /* Center the text */
-      box-sizing: border-box; /* Include padding/border in width */
-      margin-bottom: 15px; /* Space before suggestions */
+      margin: 0 auto 12px auto;
+      font-size: 21px;
+      font-weight: 600;
+      color: #22642b;
+      background: rgba(218, 255, 211, 0.95);
+      padding: 11px 15px 12px 15px;
+      border-radius: 9px;
+      border: 1.8px solid #c1edc0;
+      width: 410px;
+      text-align: center;
+      box-sizing: border-box;
+      box-shadow: 0 2px 14px #63da262b;
+      letter-spacing: 0.2px;
+      z-index: 10; /* bring in front */
+      position: relative;
     }
 
     #suggestions {
-      margin-top: 0px; /* Adjusted margin */
-      background-color: #fff9c4; /* Light yellow background */
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #ffeb3b; /* Yellow border */
-      width: 400px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-      color: #6d4c41; /* Dark brown text */
-      box-sizing: border-box; /* Include padding/border in width */
+      margin: 0 auto 16px auto;
+      background: #fffddab7;
+      padding: 14px 17px 15px 17px;
+      border-radius: 10px;
+      border: 1.5px solid #ffe273;
+      width: 410px;
+      box-shadow: 0 1.5px 9px rgba(151, 173, 108, 0.07);
+      color: #6e4f28;
+      font-size: 16px;
+      box-sizing: border-box;
+      z-index: 10; /* bring in front */
+      position: relative;
     }
 
     #suggestions h3 {
-        color: #c08700; /* Darker yellow for heading */
-        margin-top: 0;
-        margin-bottom: 10px;
+      color: #daa505;
+      margin-top: 0;
+      margin-bottom: 7px;
+      font-size: 18px;
+      letter-spacing: .2px;
     }
 
     #suggestions ul {
-        list-style-type: disc;
-        margin-left: 20px;
-        padding-left: 0;
+      list-style-type: disc;
+      margin-left: 18px;
+      margin-top: 4px; margin-bottom: 8px;
+      padding-left: 0;
     }
 
     #suggestions li {
-        margin-bottom: 5px;
+      margin-bottom: 5px;
+    }
+
+    /* --- Plant Animation --- */
+    .plant-area {
+      left: 28px;
+      bottom: 0;
+      width: 88px;
+      height: 158px;
+      pointer-events: none;
+      position: fixed;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: upDown 7s ease-in-out infinite alternate;
+    }
+    @keyframes upDown {
+      from { transform:translateY(0);}
+      to   { transform:translateY(-8px);}
+    }
+    .plant-svg { 
+      filter: drop-shadow(0 5px 10px #75e67c46);
+    }
+    .roots {
+      width: 45px;
+      height: 34px;
+      margin-top: 12px;
+      filter: blur(0.3px);
+      opacity: 0.85;
+      animation: roots-grow 2.1s ease-in forwards;
+      transform-origin: top center;
+    }
+    @keyframes roots-grow {
+      from { transform: scaleY(0);}
+      to   { transform: scaleY(1);}
+    }
+
+    @media (max-width: 600px) {
+      form, #result, #suggestions { width: 98vw; min-width: 0; max-width: 99vw;}
+      .plant-area { display: none;}
+    }
+    @media (max-width: 420px) {
+      form, #result, #suggestions { padding: 7vw 4vw; }
+      h1 { font-size: 1.55rem; }
     }
   </style>
 </head>
-
 <body>
+  <div class="sun"></div>
+
+  <!-- Animated Floating Leaves -->
+  <svg class="leaf" viewBox="0 0 38 32"><path d="M19,1 Q36,7 36,16 Q36,25 19,31 Q2,25 2,16 Q2,7 19,1 Z" fill="#a4e287"/><path d="M19 1 Q29 11 18 22 Q7 12 19 1" fill="none" stroke="#5ca420" stroke-width="1.5"/></svg>
+  <svg class="leaf" viewBox="0 0 38 32"><path d="M19,1 Q36,7 36,16 Q36,25 19,31 Q2,25 2,16 Q2,7 19,1 Z" fill="#97dd7b"/><path d="M19 1 Q29 11 18 22 Q7 12 19 1" fill="none" stroke="#42872c" stroke-width="1.5"/></svg>
+  <svg class="leaf" viewBox="0 0 38 32"><path d="M19,1 Q36,7 36,16 Q36,25 19,31 Q2,25 2,16 Q2,7 19,1 Z" fill="#cef3ae"/><path d="M19 1 Q29 11 18 22 Q7 12 19 1" fill="none" stroke="#679139" stroke-width="1.5"/></svg>
+  <svg class="leaf" viewBox="0 0 38 32"><path d="M19,1 Q36,7 36,16 Q36,25 19,31 Q2,25 2,16 Q2,7 19,1 Z" fill="#d8ffc3"/><path d="M19 1 Q29 11 18 22 Q7 12 19 1" fill="none" stroke="#95c943" stroke-width="1.5"/></svg>
+
+  <!-- Animated SVG hills at the bottom -->
+  <svg class="background-svg" viewBox="0 0 1440 340" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="hill1" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="#acd9a1"/>
+        <stop offset="85%" stop-color="#53aa5e"/>
+      </linearGradient>
+      <linearGradient id="hill2" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="1%" stop-color="#b8eba8"/>
+        <stop offset="90%" stop-color="#397a32"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,200 Q300,70 600,200 T1440,200 L1440,350 L0,350 Z" fill="url(#hill1)" opacity="0.73"/>
+    <path d="M0,305 Q450,220 700,300 T1440,290 L1440,350 L0,350 Z" fill="url(#hill2)" opacity="0.97"/>
+  </svg>
+
+  <!-- Animated Plant -->
+  <div class="plant-area">
+    <svg class="roots" viewBox="0 0 45 34" width="45" height="34">
+      <path d="M 22 2 Q24 10 14 22 Q24 19 22 34
+               M22 4 Q28 20 33 19 Q25 22 30 34
+               M22 18 Q13 26 19 25 Q20 28 15 34"
+             fill="none" stroke="#c0d8b7" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <svg class="plant-svg" viewBox="0 0 60 120" width="64" height="109">
+      <rect x="28" y="40" width="4" height="60" rx="2" fill="#62b84b">
+        <animate attributeName="y" values="45;41;45" keyTimes="0;0.5;1" dur="4s" repeatCount="indefinite"/>
+      </rect>
+      <ellipse cx="22" cy="70" rx="10" ry="22" fill="#a4e287" transform="rotate(-18 22 70)">
+        <animate attributeName="ry" values="22;26;22" keyTimes="0;0.5;1" dur="4.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="38" cy="60" rx="11" ry="20" fill="#cef3ae" transform="rotate(18 38 60)">
+        <animate attributeName="rx" values="11;13;11" keyTimes="0;0.5;1" dur="3.9s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="30" cy="30" rx="6" ry="18" fill="#77d47f">
+        <animate attributeName="rx" values="6;9;6" keyTimes="0;0.5;1" dur="4.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="30" cy="111" rx="15" ry="4" fill="#b8ebba" opacity="0.53"/>
+    </svg>
+  </div>
+
   <h1>🌿 Smart Crop Advisor</h1>
 
   <form id="cropForm">
     <label for="area">Area (in acres):</label>
-    <input type="number" step="0.1" id="area" name="area" required>
-
+    <input type="number" step="0.1" id="area" name="area" required placeholder="e.g. 2.5">
     <label for="soil_type">Soil Type:</label>
     <select id="soil_type" name="soil_type" required>
       <option value="Loamy">Loamy</option>
@@ -130,13 +311,11 @@
       <option value="Clay">Clay</option>
       <option value="Sandy">Sandy</option>
     </select>
-
     <label for="duration">Harvest Duration:</label>
     <select id="duration" name="duration" required>
       <option value="Short">Short</option>
       <option value="Long">Long</option>
     </select>
-
     <label for="month">Month:</label>
     <select id="month" name="month" required>
         <option value="">Select Month</option>
@@ -153,32 +332,25 @@
         <option value="11">November</option>
         <option value="12">December</option>
     </select>
-
-
     <label for="N">Nitrogen (optional, kg/ha):</label>
-    <input type="number" id="N" name="N">
-
+    <input type="number" id="N" name="N" placeholder="e.g. 65">
     <label for="P">Phosphorus (optional, kg/ha):</label>
-    <input type="number" id="P" name="P">
-
+    <input type="number" id="P" name="P" placeholder="e.g. 20">
     <label for="K">Potassium (optional, kg/ha):</label>
-    <input type="number" id="K" name="K">
-
+    <input type="number" id="K" name="K" placeholder="e.g. 25">
     <label for="pH">pH (optional):</label>
-    <input type="number" step="0.1" id="pH" name="pH">
-
+    <input type="number" step="0.1" id="pH" name="pH" placeholder="e.g. 6.5">
     <label for="moisture">Moisture % (optional):</label>
-    <input type="number" id="moisture" name="moisture">
+    <input type="number" id="moisture" name="moisture" placeholder="e.g. 14">
     <label for="symptoms">Observed Disease Symptoms (optional):</label>
-<select id="symptoms" name="symptoms">
-  <option value="">None</option>
-  <option value="yellow_leaves">Yellow Leaves</option>
-  <option value="wilting">Wilting</option>
-  <option value="leaf_spots">Leaf Spots</option>
-  <option value="stunted_growth">Stunted Growth</option>
-  <option value="powdery_mildew">Powdery Mildew</option>
-</select>
-
+    <select id="symptoms" name="symptoms">
+      <option value="">None</option>
+      <option value="yellow_leaves">Yellow Leaves</option>
+      <option value="wilting">Wilting</option>
+      <option value="leaf_spots">Leaf Spots</option>
+      <option value="stunted_growth">Stunted Growth</option>
+      <option value="powdery_mildew">Powdery Mildew</option>
+    </select>
     <button type="submit">🌾 Get Recommended Crop</button>
   </form>
 
